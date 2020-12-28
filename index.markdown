@@ -5,4 +5,6 @@
 layout: home
 ---
 
-# Welcome to UltimateBoomer's website.
+# Home
+
+## Welcome to UltimateBoomer's website.
