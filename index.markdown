@@ -3,8 +3,7 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
+title: Home
 ---
 
-# Home
-
-## Welcome to UltimateBoomer's website.
+# Welcome to UltimateBoomer's website.
