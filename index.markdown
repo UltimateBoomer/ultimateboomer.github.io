@@ -6,4 +6,4 @@ layout: home
 title: Home
 ---
 
-# Welcome to UltimateBoomer's website.
+## Welcome to UltimateBoomer's website.
