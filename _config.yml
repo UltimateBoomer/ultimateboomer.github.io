@@ -18,7 +18,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: My Website
+title: UltimateBoomer.github.io
+author: UltimateBoomer
 email: caohc2017@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   This is UltimateBoomer's website.
@@ -28,9 +29,18 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  UltimateBoomer
 
 # Build settings
-theme: minima
+#theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-remote-theme
+  
+remote_theme: jekyll/minima 
+  
+minima:
+   skin: dark
+   
 
 # Exclude from processing.
 # The following items will not be processed, by default.
