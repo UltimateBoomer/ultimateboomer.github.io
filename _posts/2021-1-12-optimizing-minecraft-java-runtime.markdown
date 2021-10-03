@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Optimizing Minecraft Java Runtime"
 description: "Test"
 date: 2021-1-12

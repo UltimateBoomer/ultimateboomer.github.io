@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Welcome to UltimateBoomer's Website!"
 date: 2020-12-28 13:54:00 -0500
 categories: jekyll update
