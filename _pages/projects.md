@@ -19,3 +19,8 @@ Lowers first-person fire overlay, works with any resource pack.
 An experimental mod with various texture-related features, including texture scaling, higher mipmap levels and setting LOD bias. This is useful if you're using high-resolution texture packs.
 
 [Fabric Version](https://www.curseforge.com/minecraft/mc-mods/textweaks)
+
+## Graphics
+
+### Simple Fractal Viewer
+An OpenGL shader-based mandelbrot renderer written in C++.
