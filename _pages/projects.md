@@ -32,3 +32,10 @@ An OpenGL shader-based mandelbrot renderer written in C++.
 
 ### Wordle-rust
 Command-line wordle written in rust.
+
+### Vm
+Vim-like text editor written in C++.
+Utilizes MVC architecture.
+
+### Ruse interpreter
+Lisp-like languages interpreter with Spring Boot as back-end and React as frontend.
