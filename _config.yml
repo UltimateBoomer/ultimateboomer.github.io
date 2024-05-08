@@ -51,7 +51,7 @@ remote_theme: "mmistakes/minimal-mistakes@4.24.0"
 author:
   name   : "UltimateBoomer"
   avatar : "/assets/site/photo.png"
-  bio    : "Student interested in programming and CS."
+  bio    : "Univeristy of Waterloo Computer Science student."
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
