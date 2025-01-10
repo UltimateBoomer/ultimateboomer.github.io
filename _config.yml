@@ -8,7 +8,7 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 #
-# If you need help with YAML syntax, here are some quick references for you: 
+# If you need help with YAML syntax, here are some quick references for you:
 # https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
 # https://learnxinyminutes.com/docs/yaml/
 #
@@ -18,14 +18,14 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: ultimateboomer.codes
-email: caohc2017@gmail.com
+title: ultimateboomer.github.io
+email: s3cao@uwaterloo.ca
 description: >- # this means to ignore newlines until "baseurl:"
-  This is UltimateBoomer's website.
+  This is Steven's website.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
-github_username:  UltimateBoomer
+github_username: UltimateBoomer
 minimal_mistakes_skin: dark
 
 permalink: /:categories/:title/
@@ -36,22 +36,22 @@ include:
   - _pages
 
 # Build settings
-#theme: minima
 plugins:
   - jekyll-feed
   - jekyll-paginate
   - jekyll-sitemap
-#  - jekyll-remote-theme
+  - jekyll-remote-theme
   - jekyll-include-cache
   - jemoji
 
 repository: "UltimateBoomer/ultimateboomer.github.io"
-remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+remote_theme: "mmistakes/minimal-mistakes@4.26.2"
+minimal_mistakes_skin: "dark"
 
 author:
-  name   : "UltimateBoomer"
-  avatar : "/assets/site/photo.png"
-  bio    : "Univeristy of Waterloo Computer Science student."
+  name: "UltimateBoomer"
+  avatar: "/assets/site/photo.png"
+  bio: "UWaterloo Computer Science, AI Specialization, 2027"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
@@ -83,12 +83,6 @@ defaults:
     values:
       layout: single
       author_profile: true
-
-  
-#minima:
-#   skin: dark
-   
-
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
