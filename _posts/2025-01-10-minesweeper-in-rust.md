@@ -1,22 +1,95 @@
 ---
 title: "Minesweeper in Rust"
-date: 2025-01-10
-published: false
+description: "Implementing a Minesweeper TUI app in Rust, coming from C++"
+date: 2025-02-05
+published: true
 ---
 
-After taking a object-oriented programming course last year, I wrote [nsweeper](github.com/UltimateBoomer/nsweeper), a C++ Minesweeper clone.
-Since I've been learning Rust recently, and I want to work on a simple project for fun, I decided to rewrite the game in Rust.
+Last year, I wrote [nsweeper](github.com/UltimateBoomer/nsweeper), a modern C++ Minesweeper clone.
+Since I've been learning Rust recently, and I want to work on a simple project for fun, so I decided to rewrite the game in Rust.
+
+## Design
+
+As for most applications, first I need to decide on the architecture of the project.
+I chose to use **model-view-controller** pattern as it is pretty effect for making the project more modular and easier to test.
+
+It makes sense to split each part of the pattern into different modules.
+- The model (`src/model/sweeper.rs`) contains structs for stored the Minesweeper game board, stuff used by the timer, and common Minesweeper functions (open tile, flag tile). This is essentially the backend of the program.
+- The view (`src/app/sweeper_view.rs`) in this case, contains a function which given a game, returns its text representation which can be displayed on the terminal.
+  More on the frontend implementation and library choice later.
+- The controller (`src/app/sweeper_controller.rs`), which is also part of the frontend, is a wrapper over the model.
+  It allows the game to be started/stopped at any time, and handles cursor manipulation.
+
+The module system in Rust allows each part of the pattern to be separated into different modules.
+This also means I can easily replace part of the view or controller in the future if I want to turn this project into a GUI or web app for example.
+
+### Backend
+
+As always my goal is to make the backend simple and generalizable to any frontend.
+I decided to use a struct for the game itself, the board, and individual cells with state information.
+
+```rust
+struct Cell {
+    is_bomb: bool,
+    is_flagged: bool,
+    is_revealed: bool,
+    mine_count: u8,
+}
+
+struct Board {
+    width: usize,
+    height: usize,
+    cells: Vec<Cell>,
+}
+
+enum GameState {
+    NotRunning,
+    Running,
+    Win,
+    Lose,
+}
+
+struct SweeperGame {
+    board: Board,
+    num_bombs: usize,
+    num_revealed: usize,
+    num_flags: usize,
+    state: GameState,
+    start_time: Option<Instant>,
+    total_time: Duration,
+}
+```
+
+The sweeping logic uses the commonly documented breadth first flood-fill algorithm to reveal all adjacent empty cells when a cell with no adjacent bombs is revealed.
+
+### Frontend
+
+I chose **Ratatui** for the TUI frontend, which is a simple and well designed library that is good enough for displaying the UI elements of the game and handling input.
+
+Similar to my previous project, I decided to use full-width numbers from CJK and emojis to make the numbers take up double character width and close to a square proportion.
+This makes the game look close to the real game, as long as the terminal supports unicode well.
+
+The view consists of a single function that takes a game and returns a string representation of the game board.
+I thought about encapsulating the view into a struct, but it was not necessary as the view is stateless and doesn't need to store anything.
+Instead the controller handles the logistics of the game, including start/stop, difficulty setting and key input.
+
+### Testing
+
+Unit testing is fairly easy in Rust because of its common unit testing tools.
+All we need is to define a testing module, which I've put in the same file as the implementations.
+However, I'm not sure there is a good way to mock the current time for testing, but that part of the program isn't really too complex or necessary to warrant extensive unit testing.
+In my previous experiences with C++ this is usually done by creating my own mocks for time, threads etc. with an abstract interface and concrete/mock implementations, but this requires dynamic dispatch which has a runtime performance penalty.
 
 ## What's familiar from C++
 
-Reading over the Rust programming language book, what I took away is that Rust has a lot in common with modern C++ in terms of features and the standard library, while the syntax looks closer to something like Kotlin.
+After spending a few days on this project, I realized that Rust is not too different from C++ in terms of syntax and features.
 For example, `unique_ptr` in C++ is very similar to `Box` in Rust: both are pointers which own the pointed object.
 However, there are some differences which make software design a bit different in Rust.
 
 ### Move semantics
 
 Modern C++ is known for its useful move semantics.
-It allows you to give away and object if it is not useful anymore, which opens the door to optimizations.
+It allows us to give away and object if it is not useful anymore, which opens the door to optimizations.
 
 ```c++
 void process_data_copy() {
@@ -87,66 +160,11 @@ fn do_stuff() {
 }
 ```
 
-This happened many times when developing the project, and the solution is to not define reference this way, even if it makes the code look a bit messier.
-
-## Minesweeper design and implementation
-
-I've used the **model-view-controller** pattern again to make the project more modular and make testing easier.
-
-- The model (`src/model/sweeper.rs`) contains structs for stored the Minesweeper game board, stuff used by the timer, and common Minesweeper functions (open tile, flag tile). This is basically the back-end of the program.
-- The view (`src/app/sweeper_view.rs`) contains a function which given a game, returns its text representation which can be displayed on the terminal.
-  I decided to use full-width numbers from CJK and emojis to make the game look close to the real game, as long as the terminal supports unicode well.
-- The controller (`src/app/sweeper_controller.rs`), which is also part of the front-end, is a wrapper over the model.
-  It allows the game to be started/stopped at any time, and handles cursor manipulation.
-
-The module system in Rust allows each part of the pattern to be separated into different modules, which keeps coherence high.
-This also means I can easily replace part of the view or controller in the future if I want to turn this project into a GUI or web app for example.
-
-Overall the back-end of project boils down to this model:
-
-```rust
-struct Cell {
-    is_bomb: bool,
-    is_flagged: bool,
-    is_revealed: bool,
-    mine_count: u8,
-}
-
-struct Board {
-    width: usize,
-    height: usize,
-    cells: Vec<Cell>,
-}
-
-enum GameState {
-    NotRunning,
-    Running,
-    Win,
-    Lose,
-}
-
-struct SweeperGame {
-    board: Board,
-    num_bombs: usize,
-    num_revealed: usize,
-    num_flags: usize,
-    state: GameState,
-    start_time: Option<Instant>,
-    total_time: Duration,
-}
-```
-
-This allows me to create the necessary functions for minesweeper to work, making the back-end a separate module.
-
-I chose **Ratatui** for the TUI front-end, which is good enough for displaying the UI elements and handling input.
-
-## Testing
-
-Unit testing is fairly easy in Rust because of its unit testing tools.
-All we need is to define a testing module, which I've put in the same file as the implementations.
-However, I'm not sure there is a good way to mock the current time for testing, but that part of the program isn't really too complex or necessary to warrant extensive unit testing.
-In my previous experiences with C++ this is usually done by creating my own mocks for time, threads etc. with an abstract interface and concrete/mock implementations, but this requires dynamic dispatch which has a runtime performance penalty.
+This sort of mistakes happened many times when I was developing the project, and the solution is to not define references this way.
+This does make the code a bit messier coming from C++, but it is a good habit to get into as it reduces the lifetimes requirements of the objects, which can prevent cases of undefined behavior even in C++.
 
 ## Next steps
 
-Now that I have a working demo of Minesweeper in Rust, I can separate the front-end modules and the game model into a different crates, and turn this app into something that can be used in bigger projects.
+Now that I have a working demo of Minesweeper in Rust, my next steps is to separate the frontend modules and the game model into a different crates, and turn this app into something that can potentially be used in bigger projects.
+For example, once I learn more about Rust networking, I can turn the game into a server-client game with a web app.
+Another possibility is a multiplayer Minesweeper battle royale like game, which would be a fun project to work on in the future.
